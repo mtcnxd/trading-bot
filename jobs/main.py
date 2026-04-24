@@ -8,20 +8,27 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 bitso = Bitso()
-bitsoService = BitsoService()
 
 with SessionLocal() as session:
+    bitsoService = BitsoService(session)
+
     try:
         ticker = bitso.get_ticker()
 
-        mybooks = session.query(Books).filter(Books.favorite == True).all()
-        favorites = [book.book for book in mybooks]
+        favorite_books = session.query(Books).filter(Books.favorite == True).all()
+        favorites = {book.book : book.id for book in favorite_books}
 
-        bitsoService.save_ticker(session, ticker, favorites)
+        bitsoService.save_ticker(ticker, favorites)
+        
+        for book_id in favorites.values():
+            last_ticker_info = bitsoService.get_last_ticker_info(book_id=book_id)
+
+            if last_ticker_info is not None:
+                bitsoService.save_book_changes(last_ticker_info)
         
     except Exception as e:
-        print(f"Error: {e}")
         logger.info(e)
+        session.rollback()
 
     finally:
         session.close()
