@@ -47,4 +47,4 @@ class BitsoService:
             self.session.add(new_statistic)
             self.session.commit()
             
-            self.logger.info(f"El precio anterior de {new_statistic.book.book} fue {new_statistic.last_value} el precio actual es {new_statistic.current_value} la diferencia es {new_statistic.change_value}")
+            # self.logger.info(f"El precio anterior de {new_statistic.book.book} fue {new_statistic.last_value} el precio actual es {new_statistic.current_value} la diferencia es {new_statistic.change_value}")
