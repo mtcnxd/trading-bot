@@ -18,13 +18,18 @@ with SessionLocal() as session:
         favorite_books = session.query(Books).filter(Books.favorite == True).all()
         favorites = {book.book : book.id for book in favorite_books}
 
+        last_ticker_info = []
+        for book_id in favorites.values():
+            last_ticker_info.append(bitsoService.get_last_ticker_info(book_id=book_id))
+
         bitsoService.save_ticker(ticker, favorites)
         
+        current_ticker_info = []
         for book_id in favorites.values():
-            last_ticker_info = bitsoService.get_last_ticker_info(book_id=book_id)
+            current_ticker_info.append(bitsoService.get_last_ticker_info(book_id=book_id))
 
-            if last_ticker_info is not None:
-                bitsoService.save_book_changes(last_ticker_info)
+        
+        bitsoService.save_book_changes(last_ticker_info, current_ticker_info)
         
     except Exception as e:
         logger.info(e)

@@ -29,19 +29,22 @@ class BitsoService:
     def get_last_ticker_info(self, book_id):
         return self.session.query(TickerInfo).filter(TickerInfo.book_id == book_id).order_by(TickerInfo.id.desc()).first()
 
-    def get_last_book_statistics(self, book_id):
-        return self.session.query(BookStatistics).filter(BookStatistics.book_id == book_id).order_by(BookStatistics.id.desc()).first()
+    def save_book_changes(self, last_ticker_info, curren_ticker_info):
+        for i in range(len(curren_ticker_info)):
+            book_id = curren_ticker_info[i].book_id
+            last_price = last_ticker_info[i].last
+            current_price = curren_ticker_info[i].last
+            difference = current_price - last_price
+            
+            self.logger.info(f"El precio anterior fue {last_price} y el precio actual es {current_price} la diferencia es {difference}")
 
-    def save_book_changes(self, last_ticker_info):
-        self.logger.info(last_ticker_info.last)
+            new_statistic = BookStatistics(
+                book_id = book_id,
+                last_value = last_price,
+                current_value = current_price,
+                change_value = difference,
+                change_percentage = difference / last_price * 100
+            )
 
-        new_statistic = BookStatistics(
-            book_id = last_ticker_info.book_id,
-            last_value = last_ticker_info.last,
-            current_value = last_ticker_info.last,
-            change_value = None,
-            change_percentage = None
-        )
-
-        self.session.add(new_statistic)
-        self.session.commit()
+            self.session.add(new_statistic)
+            self.session.commit()
