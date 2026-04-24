@@ -2,3 +2,4 @@ PyMySQL==1.1.2
 SQLAlchemy==2.0.48
 rich==15.0.0
 python-telegram-bot==22.7
+requests==2.33.1

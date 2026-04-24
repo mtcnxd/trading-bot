@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from database import Base
 from datetime import datetime
+from sqlalchemy.orm import relationship
 
 class TickerInfo(Base):
     __tablename__ = "ticker_info"

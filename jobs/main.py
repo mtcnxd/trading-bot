@@ -28,7 +28,6 @@ with SessionLocal() as session:
         for book_id in favorites.values():
             current_ticker_info.append(bitsoService.get_last_ticker_info(book_id=book_id))
 
-        
         bitsoService.save_book_changes(last_ticker_info, current_ticker_info)
         
     except Exception as e:

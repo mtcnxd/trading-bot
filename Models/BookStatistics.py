@@ -13,4 +13,4 @@ class BookStatistics(Base):
     change_value = Column(Double)
     change_percentage = Column(Double)
 
-    #book = relationship("Book", back_populates="books_statistics")
+    book = relationship("Books", back_populates="book_stats")
