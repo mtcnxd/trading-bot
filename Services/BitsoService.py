@@ -29,7 +29,13 @@ class BitsoService:
     def get_last_ticker_info(self, book_id):
         return self.session.query(TickerInfo).filter(TickerInfo.book_id == book_id).order_by(TickerInfo.id.desc()).first()
 
-    def save_book_changes(self, last_ticker_info, curren_ticker_info) -> BookStatistics | None:
+    def save_book_changes(self, last_ticker_info, curren_ticker_info, table) -> BookStatistics | None:
+        table.add_column("Book", style="dim")
+        table.add_column("Last value")
+        table.add_column("Current value", style="green")
+        table.add_column("Change value")
+        table.add_column("Change percentage")
+
         for i in range(len(curren_ticker_info)):
             book_id = curren_ticker_info[i].book_id
             last_price = last_ticker_info[i].last
@@ -46,5 +52,13 @@ class BitsoService:
 
             self.session.add(new_statistic)
             self.session.commit()
-            
-            # self.logger.info(f"El precio anterior de {new_statistic.book.book} fue {new_statistic.last_value} el precio actual es {new_statistic.current_value} la diferencia es {new_statistic.change_value}")
+
+            table.add_row(
+                new_statistic.book.book,
+                str(new_statistic.last_value),
+                str(new_statistic.current_value),
+                str(round(new_statistic.change_value,2)),
+                str(round(new_statistic.change_percentage,2))
+            )
+
+        return table

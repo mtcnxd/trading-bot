@@ -1,0 +1,5 @@
+import config.py
+
+class TelegramService:
+    def __init__(self):
+        pass

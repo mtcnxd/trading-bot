@@ -14,10 +14,10 @@ bitso = Bitso()
 
 def table(data):
     table = Table()
-    table.add_column("Book", style="dim", width=12)
+    table.add_column("Book", style="green", width=12)
     table.add_column("High", style="dim", width=12)
-    table.add_column("Low", style="dim", width=12)
-    table.add_column("Last", style="dim", width=12)
+    table.add_column("Low", style="red", width=12)
+    table.add_column("Last", style="green", width=12)
     table.add_column("Volume", style="dim", width=12)
     table.add_column("Change 24h", style="dim", width=12)
 
@@ -46,16 +46,19 @@ with SessionLocal() as session:
         for book_id in favorites.values():
             last_ticker_info.append(bitsoService.get_last_ticker_info(book_id=book_id))
 
+        table(last_ticker_info)
+
         bitsoService.save_ticker(ticker, favorites)
         
         current_ticker_info = []
         for book_id in favorites.values():
             current_ticker_info.append(bitsoService.get_last_ticker_info(book_id=book_id))
 
-        bitsoService.save_book_changes(last_ticker_info, current_ticker_info)
+        # table(current_ticker_info)
 
-        table(last_ticker_info)
-        table(current_ticker_info)
+        table = bitsoService.save_book_changes(last_ticker_info, current_ticker_info, Table())
+
+        console.print(table)
         
     except Exception as e:
         logger.info(e)
