@@ -1,18 +1,42 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
 from Models import BookStatistics
-import logging
+from datetime import datetime, timedelta
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+
+console = Console()
+
+def show_table(statistics):
+    table = Table()
+    table.add_column("Book", style="dim")
+    table.add_column("Last value", justify="right")
+    table.add_column("Current value", style="green", justify="right")
+    table.add_column("Change value")
+    table.add_column("Change percentage")
+    table.add_column("Created at")
+
+    for stats in statistics:
+        table.add_row(
+            stats.book.book,
+            str(stats.last_value),
+            str(stats.current_value),
+            str(stats.change_value),
+            str(stats.change_percentage),
+            str(stats.created_at)
+        )
+
+    return table
+
 
 with SessionLocal() as session:
     bitsoService = BitsoService(session)
 
     try:
-        statistics = session.query(BookStatistics).order_by(BookStatistics.id.desc()).limit(4).all()
-
-        for stats in statistics:
-            print(stats.book.book)
-            print(stats.change_value)
-            print(stats.change_percentage)
+        time_query = datetime.now() - timedelta(hours=1)
+        statistics = session.query(BookStatistics).filter(BookStatistics.created_at >= time_query).all()
+        console.print(show_table(statistics=statistics))
         
     except Exception as e:
         print(e)

@@ -12,5 +12,7 @@ class BookStatistics(Base):
     current_value = Column(Double)
     change_value = Column(Double)
     change_percentage = Column(Double)
+    updated_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.now())
 
     book = relationship("Books", back_populates="book_stats")
