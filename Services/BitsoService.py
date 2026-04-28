@@ -46,8 +46,8 @@ class BitsoService:
                 book_id = book_id,
                 last_value = last_price,
                 current_value = current_price,
-                change_value = difference,
-                change_percentage = difference / last_price * 100
+                change_value = round(difference, 2),
+                change_percentage = round(difference / last_price * 100, 2)
             )
 
             self.session.add(new_statistic)

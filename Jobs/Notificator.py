@@ -34,7 +34,7 @@ def show_table(statistics):
 with SessionLocal() as session:
     bitsoService = BitsoService(session)
     temp_sensor = Sensors().get_cpu_temperature()
-    console.print(f"CPU Temperature: {temp_sensor}", style="bold green")
+    console.print(Panel(f"CPU Temperature: {temp_sensor}", style="bold red"))
 
     try:
         time_query = datetime.now() - timedelta(hours=1)
