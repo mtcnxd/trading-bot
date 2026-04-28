@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
+from Services.Sensors import Sensors
 
 console = Console()
 
@@ -32,6 +33,8 @@ def show_table(statistics):
 
 with SessionLocal() as session:
     bitsoService = BitsoService(session)
+    temp_sensor = Sensors().get_cpu_temperature()
+    console.print(f"CPU Temperature: {temp_sensor}", style="bold green")
 
     try:
         time_query = datetime.now() - timedelta(hours=1)
