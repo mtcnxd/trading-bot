@@ -1,5 +1,6 @@
 from Models import TickerInfo
 from Models import BookStatistics
+from APIs.Bitso import Bitso
 import logging
 
 class BitsoService:
@@ -47,7 +48,7 @@ class BitsoService:
                 last_value = last_price,
                 current_value = current_price,
                 change_value = round(difference, 2),
-                change_percentage = round(difference / last_price * 100, 2)
+                change_percentage = round(((difference / last_price) * 100), 2)
             )
 
             self.session.add(new_statistic)
@@ -62,3 +63,12 @@ class BitsoService:
             )
 
         return table
+
+    def get_balance(self):
+        bitso = Bitso()
+        balances = bitso.get_balance()
+
+        if balances is not None:
+            for balance in balances['payload']['balances']:
+                if float(balance['total']) > 0.0001:
+                    print(f"Currency: {balance['currency']} Available {balance['available']} Total {balance['total']}")

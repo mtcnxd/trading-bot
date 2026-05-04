@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from Services.Sensors import Sensors
+#from Services.Sensors import Sensors
 
 console = Console()
 
@@ -33,13 +33,15 @@ def show_table(statistics):
 
 with SessionLocal() as session:
     bitsoService = BitsoService(session)
-    temp_sensor = Sensors().get_cpu_temperature()
-    console.print(Panel(f"CPU Temperature: {temp_sensor}", style="bold red"))
+    #temp_sensor = Sensors().get_cpu_temperature()
+    #console.print(Panel(f"CPU Temperature: {temp_sensor}", style="bold red"))
 
     try:
         time_query = datetime.now() - timedelta(hours=1)
         statistics = session.query(BookStatistics).filter(BookStatistics.created_at >= time_query).all()
         console.print(show_table(statistics=statistics))
+        
+        balance = bitsoService.get_balance()
         
     except Exception as e:
         print(e)
