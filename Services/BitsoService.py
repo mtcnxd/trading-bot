@@ -1,5 +1,6 @@
 from Models import TickerInfo
 from Models import BookStatistics
+from Models import Balance
 from APIs.Bitso import Bitso
 import logging
 
@@ -69,6 +70,16 @@ class BitsoService:
         balances = bitso.get_balance()
 
         if balances is not None:
-            for balance in balances['payload']['balances']:
+            for balance in balances['balances']:
                 if float(balance['total']) > 0.0001:
+                    
+                    new_balance = Balance(
+                        currency = balance['currency'],
+                        available = float(balance['available']),
+                        total = float(balance['total'])
+                    )
+                    
+                    self.session.add(new_balance)
+                    self.session.commit()
+
                     print(f"Currency: {balance['currency']} Available {balance['available']} Total {balance['total']}")

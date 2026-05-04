@@ -42,6 +42,7 @@ with SessionLocal() as session:
         console.print(show_table(statistics=statistics))
         
         balance = bitsoService.get_balance()
+        console.print(balance)
         
     except Exception as e:
         print(e)
