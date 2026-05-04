@@ -83,3 +83,7 @@ class BitsoService:
                     self.session.commit()
 
                     print(f"Currency: {balance['currency']} Available {balance['available']} Total {balance['total']}")
+
+    def get_account_status(self):
+        bitso = Bitso()
+        bitso.get_account_status()

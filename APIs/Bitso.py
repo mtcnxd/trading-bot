@@ -55,3 +55,7 @@ class Bitso:
     def place_order(self):
         self.base_url + "/v3/orders"
         pass
+
+    def get_account_status(self):
+        response  = self.make_request(self.base_url + "/v3/account_status", headers={"Authorization": self.create_signature("GET", "/v3/account_status")})
+        print(response)
