@@ -7,8 +7,8 @@ import hashlib
 class Bitso:
     def __init__(self):
         self.base_url = "https://api.bitso.com"
-        self.bitso_key = config.API_KEY
-        self.bitso_secret = config.API_SECRET
+        self.bitso_key = config.BITSO_KEY
+        self.bitso_secret = config.BITSO_SECRET
 
     def make_request(self, url, headers=None) -> dict | None:
         response = requests.get(url, headers=headers)
@@ -26,12 +26,14 @@ class Bitso:
         return auth_header
 
     def get_ticker(self, book=None):
-        # optional: /v3/ticker?book=btc_mxn
-        response = self.make_request(self.base_url + "/v3/ticker")
-        
+        if book is not None:
+            response = self.make_request(self.base_url + "/v3/ticker?book=" + book)
+        else:
+            response = self.make_request(self.base_url + "/v3/ticker")
+
         if response is not None:
             return response["payload"]
-    
+
     def get_balance(self):
         request_path = "/v3/balance/"
         auth_header = self.create_signature("GET", request_path)
@@ -58,4 +60,5 @@ class Bitso:
 
     def get_account_status(self):
         response  = self.make_request(self.base_url + "/v3/account_status", headers={"Authorization": self.create_signature("GET", "/v3/account_status")})
-        print(response)
+        if response is not None:
+            return response['payload']

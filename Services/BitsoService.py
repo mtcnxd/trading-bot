@@ -68,21 +68,24 @@ class BitsoService:
     def get_balance(self):
         bitso = Bitso()
         balances = bitso.get_balance()
+        result_balance = []
 
         if balances is not None:
             for balance in balances['balances']:
                 if float(balance['total']) > 0.0001:
-                    
+
                     new_balance = Balance(
                         currency = balance['currency'],
                         available = float(balance['available']),
                         total = float(balance['total'])
                     )
+
+                    result_balance.append(new_balance)
                     
                     self.session.add(new_balance)
                     self.session.commit()
 
-                    print(f"Currency: {balance['currency']} Available {balance['available']} Total {balance['total']}")
+        return result_balance
 
     def get_account_status(self):
         bitso = Bitso()
