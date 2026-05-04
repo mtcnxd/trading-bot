@@ -25,8 +25,9 @@ class Bitso:
         auth_header = 'Bitso %s:%s:%s' % (self.bitso_key, nonce, signature)
         return auth_header
 
-    def get_ticker(self):
-        response = self.make_request(self.base_url + "/v3/ticker/")
+    def get_ticker(self, book=None):
+        # optional: /v3/ticker?book=btc_mxn
+        response = self.make_request(self.base_url + "/v3/ticker")
         
         if response is not None:
             return response["payload"]
@@ -38,3 +39,19 @@ class Bitso:
         
         if response is not None:
             return response["payload"]
+
+    def get_orders(self):
+        self.base_url + "/v3/orders"
+        pass
+
+    def cancel_order(self):
+        self.base_url + "/v3/orders/{id}/"
+        pass
+
+    def get_trades(self):
+        self.base_url + "/v3/trades"
+        pass
+
+    def place_order(self):
+        self.base_url + "/v3/orders"
+        pass
