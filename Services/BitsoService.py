@@ -6,6 +6,7 @@ import logging
 
 class BitsoService:
     def __init__(self, session):
+        self.bitso = Bitso()
         self.session = session
         self.logger = logging.getLogger(__name__)
 
@@ -66,8 +67,7 @@ class BitsoService:
         return table
 
     def get_balance(self):
-        bitso = Bitso()
-        balances = bitso.get_balance()
+        balances = self.bitso.get_balance()
         result_balance = []
 
         if balances is not None:
@@ -87,6 +87,11 @@ class BitsoService:
 
         return result_balance
 
+    def get_trades(self, book):
+        return self.bitso.get_trades(book)
+
+    def get_orders(self):
+        return self.bitso.get_orders()
+
     def get_account_status(self):
-        bitso = Bitso()
-        bitso.get_account_status()
+        return self.bitso.get_account_status()
