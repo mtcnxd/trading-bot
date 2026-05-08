@@ -35,30 +35,50 @@ class Bitso:
             return response["payload"]
 
     def get_balance(self):
-        request_path = "/v3/balance/"
-        auth_header = self.create_signature("GET", request_path)
-        response = self.make_request(self.base_url + request_path, headers={"Authorization": auth_header})
+        response = self.make_request(
+            self.base_url + "/v3/balance/", 
+            headers={"Authorization": self.create_signature("GET", "/v3/balance/")}
+        )
         
         if response is not None:
             return response["payload"]
 
     def get_orders(self):
-        self.base_url + "/v3/orders"
-        pass
+        response = self.make_request(
+            self.base_url + "/v3/orders", 
+            headers={"Authorization": self.create_signature("GET", "/v3/orders")}
+        )
+        
+        if response is not None:
+            return response['payload']
 
     def cancel_order(self):
         self.base_url + "/v3/orders/{id}/"
         pass
 
     def get_trades(self):
-        self.base_url + "/v3/trades"
-        pass
+        response = self.make_request(
+            self.base_url + "/v3/trades", 
+            headers={"Authorization": self.create_signature("GET", "/v3/trades")}
+        )
+        
+        if response is not None:
+            return response['payload']
 
     def place_order(self):
-        self.base_url + "/v3/orders"
-        pass
+        response = self.make_request(
+            self.base_url + "/v3/orders", 
+            headers={"Authorization": self.create_signature("POST", "/v3/orders")}
+        )
+        
+        if response is not None:
+            return response['payload']
 
     def get_account_status(self):
-        response  = self.make_request(self.base_url + "/v3/account_status", headers={"Authorization": self.create_signature("GET", "/v3/account_status")})
+        response  = self.make_request(
+            self.base_url + "/v3/account_status", 
+            headers={"Authorization": self.create_signature("GET", "/v3/account_status")}
+        )
+
         if response is not None:
             return response['payload']
