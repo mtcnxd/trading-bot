@@ -13,7 +13,8 @@ with SessionLocal() as session:
         balances = bitsoService.get_balance()
 
         for balance in balances:
-            console.print(f"Currency: {balance.currency} | Available {balance.available} | Total {balance.total}")
+            if balance.total > 0.001:
+                console.print(f"Currency: {balance.currency} | Available {balance.available} | Total {balance.total}")
 
     except Exception as e:
         print(e)
