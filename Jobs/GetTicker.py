@@ -38,7 +38,6 @@ with SessionLocal() as session:
 
     try:
         ticker = bitso.get_ticker()
-
         favorite_books = session.query(Books).filter(Books.favorite == True).all()
         favorites = {book.book : book.id for book in favorite_books}
 
@@ -53,8 +52,6 @@ with SessionLocal() as session:
         current_ticker_info = []
         for book_id in favorites.values():
             current_ticker_info.append(bitsoService.get_last_ticker_info(book_id=book_id))
-
-        # table(current_ticker_info)
 
         table = bitsoService.save_book_changes(last_ticker_info, current_ticker_info, Table())
 
