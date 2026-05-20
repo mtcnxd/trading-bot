@@ -1,6 +1,4 @@
-from Models import TickerInfo
-from Models import BookStatistics
-from Models import Balance, Trades
+from Models import Ticker, Balance, Trades
 from APIs.Bitso import Bitso
 import logging
 import datetime
@@ -11,69 +9,33 @@ class BitsoService:
         self.session = session
         self.logger = logging.getLogger(__name__)
 
-    def save_ticker(self, ticker, favorites):
-        for ticker_book in ticker:            
-            if ticker_book.get('book') in favorites.keys():
-                book = ticker_book.get('book')
+    def get_ticker(self) -> dict:
+        tickers = self.bitso.get_ticker()
 
-                new_ticker = TickerInfo(
-                    book = ticker_book.get("book"),
-                    book_id = favorites.get(book),
-                    high = ticker_book.get("high"),
-                    low = ticker_book.get("low"),
-                    last = ticker_book.get("last"),
-                    volume = ticker_book.get("volume"),
-                    change_24 = ticker_book.get("change_24")
+        if tickers is not None:
+            for ticker in tickers:
+                new_ticker = Ticker(
+                    book = ticker.get("book"),
+                    high = ticker.get("high"),
+                    low = ticker.get("low"),
+                    last = ticker.get("last"),
+                    volume = ticker.get("volume"),
+                    change_24 = ticker.get("change_24")
                 )
 
                 self.session.add(new_ticker)
-        
-        self.session.commit()
+                self.session.commit()
 
-    def get_last_ticker_info(self, book_id):
-        return self.session.query(TickerInfo).filter(TickerInfo.book_id == book_id).order_by(TickerInfo.id.desc()).first()
+        return tickers
 
-    def save_book_changes(self, last_ticker_info, curren_ticker_info, table) -> BookStatistics | None:
-        table.add_column("Book", style="dim")
-        table.add_column("Last value")
-        table.add_column("Current value", style="green")
-        table.add_column("Change value")
-        table.add_column("Change percentage")
-
-        for i in range(len(curren_ticker_info)):
-            book_id = curren_ticker_info[i].book_id
-            last_price = last_ticker_info[i].last
-            current_price = curren_ticker_info[i].last
-            difference = current_price - last_price
-
-            new_statistic = BookStatistics(
-                book_id = book_id,
-                last_value = last_price,
-                current_value = current_price,
-                change_value = round(difference, 2),
-                change_percentage = round(((difference / last_price) * 100), 2)
-            )
-
-            self.session.add(new_statistic)
-            self.session.commit()
-
-            table.add_row(
-                new_statistic.book.book,
-                str(new_statistic.last_value),
-                str(new_statistic.current_value),
-                str(round(new_statistic.change_value,2)),
-                str(round(new_statistic.change_percentage,2))
-            )
-
-        return table
-
-    def get_balance(self):
+    def get_balance(self) -> dict :
         balances = self.bitso.get_balance()
 
         if balances is not None:
             for balance in balances['balances']:
-                if float(balance['total']) > 0.0001:
+                existing_balance = self.session.query(Balance).filter(Balance.currency == balance['currency']).first()
 
+                if existing_balance is None:
                     new_balance = Balance(
                         currency = balance['currency'],
                         available = float(balance['available']),
@@ -88,7 +50,7 @@ class BitsoService:
     def get_trades(self, book, limit=20):
         return self.bitso.get_trades(book, limit)
 
-    def get_user_trades(self):
+    def get_user_trades(self) -> dict:
         trades = self.bitso.get_user_trades()
         
         if trades is not None:

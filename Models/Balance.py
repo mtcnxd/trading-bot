@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import relationship
 
 class Balance(Base):
-    __tablename__ = "balances"
+    __tablename__ = "balance"
 
     id = Column(Integer, primary_key=True)
     currency = Column(String(50))
