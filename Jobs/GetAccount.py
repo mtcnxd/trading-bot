@@ -1,13 +1,12 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
 from rich.console import Console
-from rich.table import Table
 # from Services.Sensors import Sensors
 
 console = Console()
 
 with SessionLocal() as session:
-    #temp_sensor = Sensors().get_cpu_temperature()
+    # temp_sensor = Sensors().get_cpu_temperature()
 
     try:
         bitso_service = BitsoService(session)
