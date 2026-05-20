@@ -47,9 +47,6 @@ class BitsoService:
 
         return balances
 
-    def get_trades(self, book, limit=20):
-        return self.bitso.get_trades(book, limit)
-
     def get_user_trades(self) -> dict:
         trades = self.bitso.get_user_trades()
         
@@ -77,8 +74,14 @@ class BitsoService:
 
         return trades
 
+    def get_trades(self, book, limit=20):
+        return self.bitso.get_trades(book, limit)
+
     def get_orders(self):
         return self.bitso.get_orders()
+
+    def place_order(self, trade_data):
+        pass
 
     def get_account_status(self):
         return self.bitso.get_account_status()
