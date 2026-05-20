@@ -10,7 +10,8 @@ with SessionLocal() as session:
     bitsoService = BitsoService(session)
 
     try:
-        trades = bitsoService.get_trades("btc_mxn")
+        #trades = bitsoService.get_trades("btc_usdt", limit=10)
+        trades = bitsoService.get_user_trades()
         
         for trade in trades:
             console.print(trade)

@@ -2,8 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from config import DB_HOST, DB_USERNAME, DB_PASSWORD
 
-# DATABASE_URL = "mysql+pymysql://marcos:Tucm+1985@raspberry.local/TradingBot"
-
 DATABASE_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/TradingBot"
 
 engine = create_engine(DATABASE_URL)

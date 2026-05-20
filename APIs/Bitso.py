@@ -59,9 +59,9 @@ class Bitso:
     def cancel_order(self):
         self.base_url + "/v3/orders/{id}/"
 
-    def get_trades(self, book):
+    def get_trades(self, book, limit=20):
         response = self.make_request(
-            self.base_url + f"/v3/trades?book={book}", headers={"Authorization": self.create_signature("GET", f"/v3/trades?book={book}")}
+            self.base_url + f"/v3/trades?book={book}&limit={limit}", headers={"Authorization": self.create_signature("GET", f"/v3/trades?book={book}&limit={limit}")}
         )
 
         if response is None:
@@ -83,6 +83,14 @@ class Bitso:
     def get_account_status(self):
         response = self.make_request(
             self.base_url + "/v3/account_status", headers={"Authorization": self.create_signature("GET", "/v3/account_status")}
+        )
+
+        if response is not None:
+            return response['payload']
+
+    def get_user_trades(self):
+        response = self.make_request(
+            self.base_url + "/v3/user_trades?limit=5", headers={"Authorization": self.create_signature("GET", "/v3/user_trades?limit=5")}
         )
 
         if response is not None:

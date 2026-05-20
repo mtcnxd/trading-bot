@@ -8,8 +8,6 @@ with SessionLocal() as session:
         
         for result in results:
             print(f"{result.created_at} - {result.last}")
-
-        
     
     except Exception as e:
         print(f"Error: {e}")

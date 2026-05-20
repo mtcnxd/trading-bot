@@ -1,8 +1,9 @@
 from Models import TickerInfo
 from Models import BookStatistics
-from Models import Balance
+from Models import Balance, Trades
 from APIs.Bitso import Bitso
 import logging
+import datetime
 
 class BitsoService:
     def __init__(self, session):
@@ -68,7 +69,6 @@ class BitsoService:
 
     def get_balance(self):
         balances = self.bitso.get_balance()
-        result_balance = []
 
         if balances is not None:
             for balance in balances['balances']:
@@ -80,15 +80,40 @@ class BitsoService:
                         total = float(balance['total'])
                     )
 
-                    result_balance.append(new_balance)
-                    
                     self.session.add(new_balance)
                     self.session.commit()
 
-        return result_balance
+        return balances
 
-    def get_trades(self, book):
-        return self.bitso.get_trades(book)
+    def get_trades(self, book, limit=20):
+        return self.bitso.get_trades(book, limit)
+
+    def get_user_trades(self):
+        trades = self.bitso.get_user_trades()
+        
+        if trades is not None:
+            for trade in trades:
+                existing_trade = self.session.query(Trades).filter(Trades.tid == trade['tid']).first()
+
+                if existing_trade is None:
+                    new_trade = Trades(
+                        book = trade['book'],
+                        major = float(trade['major']),
+                        minor = float(trade['minor']),
+                        major_currency = trade['major_currency'],
+                        minor_currency = trade['minor_currency'],
+                        price = float(trade['price']),
+                        side = trade['side'],
+                        fees_amount = float(trade['fees_amount']),
+                        tid = trade['tid'],
+                        oid = trade['oid'],
+                        created_at = datetime.datetime.strptime(trade['created_at'], '%Y-%m-%dT%H:%M:%S%z')
+                    )
+
+                    self.session.add(new_trade)
+                    self.session.commit()
+
+        return trades
 
     def get_orders(self):
         return self.bitso.get_orders()
