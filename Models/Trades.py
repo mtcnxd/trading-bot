@@ -3,7 +3,7 @@ from database import Base
 from sqlalchemy.orm import relationship
 
 class Trades(Base):
-    __tablename__ = "trades_history"
+    __tablename__ = "trades"
 
     id = Column(Integer, primary_key=True)
     book = Column(String(10))
