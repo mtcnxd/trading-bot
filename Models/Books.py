@@ -9,5 +9,3 @@ class Books(Base):
     id = Column(Integer, primary_key=True)
     book = Column(String(50))
     favorite = Column(Boolean, default=False)
-
-    book_stats = relationship("BookStatistics", back_populates="book")

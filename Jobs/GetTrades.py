@@ -1,6 +1,5 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
-from Models import BookStatistics
 from datetime import datetime, timedelta
 from rich.console import Console
 from rich.table import Table
@@ -23,8 +22,6 @@ with SessionLocal() as session:
         table.add_column("Created at")
 
         for trade in trades:
-            print(trade)
-
             table.add_row(
                 trade['book'],
                 str(trade['amount']),
