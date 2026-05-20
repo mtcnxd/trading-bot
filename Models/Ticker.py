@@ -3,8 +3,8 @@ from database import Base
 from datetime import datetime
 from sqlalchemy.orm import relationship
 
-class TickerInfo(Base):
-    __tablename__ = "ticker_info"
+class Ticker(Base):
+    __tablename__ = "ticker"
 
     id = Column(Integer, primary_key=True)
     book = Column(String(50))

@@ -1,5 +1,5 @@
 from .Books import Books
-from .TickerInfo import TickerInfo
-from .BookStatistics import BookStatistics
+from .Ticker import Ticker
 from .Balance import Balance
 from .Trades import Trades
+from .BookStatistics import BookStatistics
