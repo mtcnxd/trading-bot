@@ -1,6 +1,5 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
-from Models import BookStatistics
 from datetime import datetime, timedelta
 from rich.console import Console
 from rich.table import Table
