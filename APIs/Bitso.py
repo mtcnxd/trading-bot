@@ -65,10 +65,10 @@ class Bitso:
             headers={"Authorization": self.create_signature("GET", f"/v3/trades?book={book}&limit={limit}")}
         )
 
-        if response is None:
-            raise Exception("API request failed")
+        if not response:
+            raise Exception("API request failed or response is none")
 
-        if response['success'] == False:
+        if not response['success']:
             raise Exception(response['error']['message'])
 
         return response['payload']
