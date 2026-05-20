@@ -12,7 +12,7 @@ class Bitso:
 
     def make_request(self, url, headers=None) -> dict | None:
         response = requests.get(url, headers=headers)
-        
+
         if response is None:
             return None
 
@@ -36,10 +36,10 @@ class Bitso:
 
     def get_balance(self):
         response = self.make_request(
-            self.base_url + "/v3/balance/", 
+            self.base_url + "/v3/balance/",
             headers={"Authorization": self.create_signature("GET", "/v3/balance/")}
         )
-        
+
         if response is not None:
             return response["payload"]
 
@@ -47,10 +47,10 @@ class Bitso:
         response = self.make_request(
             self.base_url + "/v3/orders", headers={"Authorization": self.create_signature("GET", "/v3/orders")}
         )
-        
+
         if response is None:
             raise Exception("API request failed")
-        
+
         if response['success'] == False:
             raise Exception(response['error']['message'])
 
@@ -76,7 +76,7 @@ class Bitso:
         response = self.make_request(
             self.base_url + "/v3/orders", headers={"Authorization": self.create_signature("POST", "/v3/orders")}
         )
-        
+
         if response is not None:
             return response['payload']
 

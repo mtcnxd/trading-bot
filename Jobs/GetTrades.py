@@ -1,6 +1,5 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
-from datetime import datetime, timedelta
 from rich.console import Console
 from rich.table import Table
 
@@ -11,7 +10,7 @@ with SessionLocal() as session:
 
     try:
         trades = bitsoService.get_trades("btc_usdt", limit=10)
-        
+
         table = Table(title="Trades", style="dim", show_header=True, header_style="bold magenta")
 
         table.add_column("Book", style="dim")

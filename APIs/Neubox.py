@@ -1,5 +1,6 @@
 import requests
 
+
 class Neubox:
     def __init__(self):
         self.base_url = "https://mecanicarubio.com/api/"

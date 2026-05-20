@@ -1,8 +1,7 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
 from rich.console import Console
-from rich.table import Table
-# from Services.Sensors import Sensors
+#from Services.Sensors import Sensors
 
 console = Console()
 
