@@ -4,3 +4,4 @@ rich==15.0.0
 python-telegram-bot==22.7
 requests==2.33.1
 timedelta==2020.12.3
+cryptography==48.0.0
