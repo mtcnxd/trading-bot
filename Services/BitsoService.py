@@ -9,11 +9,14 @@ class BitsoService:
         self.session = session
         self.logger = logging.getLogger(__name__)
 
-    def get_ticker(self) -> dict:
+    def get_ticker(self, favorites: list) -> dict:
         tickers = self.bitso.get_ticker()
 
         if tickers is not None:
             for ticker in tickers:
+                if ticker.get("book") not in favorites:
+                    continue
+
                 new_ticker = Ticker(
                     book = ticker.get("book"),
                     high = ticker.get("high"),
@@ -43,6 +46,12 @@ class BitsoService:
                     )
 
                     self.session.add(new_balance)
+                    self.session.commit()
+
+                else:
+                    existing_balance.available = float(balance['available'])
+                    existing_balance.total = float(balance['total'])
+                    existing_balance.updated_at = datetime.datetime.now()
                     self.session.commit()
 
         return balances
@@ -80,8 +89,8 @@ class BitsoService:
     def get_orders(self):
         return self.bitso.get_orders()
 
-    def place_order(self, trade_data):
-        pass
+    def place_order(self, trade_data : dict) -> dict:
+        return {}
 
-    def get_account_status(self):
+    def get_account_status(self) -> dict:
         return self.bitso.get_account_status()

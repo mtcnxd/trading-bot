@@ -10,4 +10,4 @@ class Balance(Base):
     currency = Column(String(50))
     available = Column(Float)
     total = Column(Float)
-    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now)
