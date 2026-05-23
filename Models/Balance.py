@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Float
 from database import Base
 from datetime import datetime
-from sqlalchemy.orm import relationship
+
 
 class Balance(Base):
     __tablename__ = "balance"
