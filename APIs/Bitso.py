@@ -4,6 +4,7 @@ import hmac
 import config
 import hashlib
 
+
 class Bitso:
 
     def __init__(self):
