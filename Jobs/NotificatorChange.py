@@ -28,7 +28,7 @@ with SessionLocal() as session:
         results = session.query(Ticker)\
             .filter(Ticker.book == "btc_usdt")\
             .order_by(Ticker.id.desc())\
-            .limit(2)\
+            .limit(1)\
             .all()
 
         for result in results:
@@ -38,7 +38,7 @@ with SessionLocal() as session:
             console.print(f"{result.created_at} | Low: {result.low} - Current: {result.last} - High: {result.high} | From low to last: {raising_percentage:.2f}% | From high to last: {falling_percentage:.2f}%")
 
             Telegram().send_message(
-                f"*Updated time:* {result.created_at} \n"
+                f"*Updated at:* {result.created_at} \n"
                 f"*Lower price:* {to_currency(result.low)} \n"
                 f"*Current price:* {to_currency(result.last)} \n"
                 f"*Higher price:* {to_currency(result.high)} \n"
