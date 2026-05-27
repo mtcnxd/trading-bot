@@ -28,7 +28,7 @@ with SessionLocal() as session:
         results = session.query(Ticker)\
             .filter(Ticker.book == "btc_usdt")\
             .order_by(Ticker.id.desc())\
-            .limit(1)\
+            .limit(2)\
             .all()
 
         for result in results:

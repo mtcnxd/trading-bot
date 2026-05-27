@@ -1,5 +1,6 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
+from Services.Telegram import Telegram
 from datetime import datetime, timedelta
 from rich.console import Console
 from rich.table import Table
@@ -44,7 +45,8 @@ with SessionLocal() as session:
         console.print(table)
 
     except Exception as e:
-        console.print(f"ERROR MESSAGE: {e}", style="bold red")
+        console.print(f"FAILED UPDATE USER TRADES | MESSAGE: {e}")
+        Telegram().send_message(f"FAILED UPDATE USER TRADES | MESSAGE: {e}")
         session.rollback()
 
     finally:

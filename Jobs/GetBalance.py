@@ -1,5 +1,6 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
+from Services.Telegram import Telegram
 from rich.console import Console
 from rich.table import Table
 
@@ -27,7 +28,8 @@ with SessionLocal() as session:
         console.print(table)
 
     except Exception as e:
-        console.print(f"FAILED TO GET BALANCE | MESSAGE: {e}")
+        console.print(f"FAILED UPDATE BALANCE | MESSAGE: {e}")
+        Telegram().send_message(f"FAILED UPDATE BALANCE | MESSAGE: {e}")
         session.rollback()
 
     finally:
