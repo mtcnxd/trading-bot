@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Double, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Double, DateTime, ForeignKey
 from database import Base
 from datetime import datetime
-from sqlalchemy.orm import relationship
+
 
 class Ticker(Base):
     __tablename__ = "ticker"
@@ -16,3 +16,4 @@ class Ticker(Base):
     change_24 = Column(Double)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
+    

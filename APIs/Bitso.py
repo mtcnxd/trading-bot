@@ -4,7 +4,9 @@ import hmac
 import config
 import hashlib
 
+
 class Bitso:
+
     def __init__(self):
         self.base_url = "https://api.bitso.com"
         self.bitso_key = config.BITSO_KEY
