@@ -1,5 +1,6 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
+from Services.Telegram import Telegram
 from Models import Books
 from rich.console import Console
 from rich.table import Table
@@ -11,13 +12,13 @@ with SessionLocal() as session:
         bitso_service = BitsoService(session)
 
         books = session.query(Books.book).filter(Books.favorite == True).all()
-        
+
         favorites = [book[0] for book in books]
 
         tickers = bitso_service.get_ticker(favorites=favorites)
 
         table = Table(title="Bitso Tickers", style="dim", show_header=True, header_style="bold magenta")
-        
+
         table.add_column("Book", style="dim")
         table.add_column("High")
         table.add_column("Low")
@@ -39,6 +40,7 @@ with SessionLocal() as session:
 
     except Exception as e:
         console.print(f"FAILED UPDATE TICKER | MESSAGE: {e}")
+        Telegram().send_message(f"FAILED UPDATE TICKER | MESSAGE: {e}")
         session.rollback()
 
     finally:
