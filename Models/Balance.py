@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, DateTime, Float
 from database import Base
 from datetime import datetime
 
-
 class Balance(Base):
     __tablename__ = "balance"
 

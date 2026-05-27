@@ -14,16 +14,16 @@ class Bitso:
 
     def make_request(self, url, headers=None) -> dict | None:
         response = requests.get(url, headers=headers)
-        
+
         if response is None:
             return None
 
         return response.json()
 
     def create_signature(self, http_method, request_path):
-        nonce =  str(int(round(time.time() * 1000)))
+        nonce = str(int(round(time.time() * 1000)))
         message = nonce+http_method+request_path
-        signature = hmac.new(self.bitso_secret.encode('utf-8'),message.encode('utf-8'),hashlib.sha256).hexdigest()
+        signature = hmac.new(self.bitso_secret.encode('utf-8'), message.encode('utf-8'), hashlib.sha256).hexdigest()
         auth_header = 'Bitso %s:%s:%s' % (self.bitso_key, nonce, signature)
         return auth_header
 
@@ -38,10 +38,10 @@ class Bitso:
 
     def get_balance(self):
         response = self.make_request(
-            self.base_url + "/v3/balance/", 
+            self.base_url + "/v3/balance/",
             headers={"Authorization": self.create_signature("GET", "/v3/balance/")}
         )
-        
+
         if response is not None:
             return response["payload"]
 
@@ -49,11 +49,11 @@ class Bitso:
         response = self.make_request(
             self.base_url + "/v3/orders", headers={"Authorization": self.create_signature("GET", "/v3/orders")}
         )
-        
-        if response is None:
-            raise Exception("API request failed")
-        
-        if response['success'] == False:
+
+        if not response:
+            raise Exception("API request failed or response is none")
+
+        if not response['success']:
             raise Exception(response['error']['message'])
 
         return response['payload']
@@ -63,13 +63,14 @@ class Bitso:
 
     def get_trades(self, book, limit=20) -> dict:
         response = self.make_request(
-            self.base_url + f"/v3/trades?book={book}&limit={limit}", headers={"Authorization": self.create_signature("GET", f"/v3/trades?book={book}&limit={limit}")}
+            self.base_url + f"/v3/trades?book={book}&limit={limit}",
+            headers={"Authorization": self.create_signature("GET", f"/v3/trades?book={book}&limit={limit}")}
         )
 
-        if response is None:
-            raise Exception("API request failed")
+        if not response:
+            raise Exception("API request failed or response is none")
 
-        if response['success'] == False:
+        if not response['success']:
             raise Exception(response['error']['message'])
 
         return response['payload']
@@ -78,7 +79,7 @@ class Bitso:
         response = self.make_request(
             self.base_url + "/v3/orders", headers={"Authorization": self.create_signature("POST", "/v3/orders")}
         )
-        
+
         if response is not None:
             return response['payload']
 

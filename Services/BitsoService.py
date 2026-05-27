@@ -58,7 +58,7 @@ class BitsoService:
 
     def get_user_trades(self) -> dict:
         trades = self.bitso.get_user_trades()
-        
+
         if trades is not None:
             for trade in trades:
                 existing_trade = self.session.query(Trades).filter(Trades.tid == trade['tid']).first()

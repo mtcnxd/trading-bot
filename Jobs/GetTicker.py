@@ -7,7 +7,7 @@ console = Console()
 
 with SessionLocal() as session:
     try:
-        favorites = ["btc_mxn","eth_mxn","ltc_mxn","btc_usdt"]
+        favorites = ["btc_mxn", "eth_mxn", "ltc_mxn", "btc_usdt"]
 
         bitso_service = BitsoService(session)
         tickers = bitso_service.get_ticker(favorites)
