@@ -1,5 +1,6 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
+from Models import Books
 from rich.console import Console
 from rich.table import Table
 
@@ -7,10 +8,13 @@ console = Console()
 
 with SessionLocal() as session:
     try:
-        favorites = ["btc_mxn", "eth_mxn", "ltc_mxn", "btc_usdt"]
-
         bitso_service = BitsoService(session)
-        tickers = bitso_service.get_ticker(favorites)
+
+        books = session.query(Books.book).filter(Books.favorite == True).all()
+        
+        favorites = [book[0] for book in books]
+
+        tickers = bitso_service.get_ticker(favorites=favorites)
 
         table = Table(title="Bitso Tickers", style="dim", show_header=True, header_style="bold magenta")
         
