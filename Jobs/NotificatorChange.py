@@ -17,13 +17,20 @@ def to_currency(number):
 
 with SessionLocal() as session:
     try:
-        average = session.query(func.avg(Ticker.last))\
+        trading_service = TradingService()
+
+        prices = session.query(Ticker.last)\
             .filter(Ticker.book == "btc_usdt")\
             .order_by(Ticker.created_at.desc())\
-            .limit(5)\
-            .scalar()
+            .limit(24)\
+            .all()
 
-        console.print(Panel(f"Average price: {average:.2f}"))
+        prices = [price[0] for price in prices]
+
+        sma = trading_service.sma(prices)
+        ema = trading_service.ema(prices, periods=10)
+
+        console.print(Panel(f"Simple Moving Average: {sma:.2f}"))
 
         result = session.query(Ticker)\
             .filter(Ticker.book == "btc_usdt")\
@@ -31,19 +38,25 @@ with SessionLocal() as session:
             .limit(1)\
             .first()
 
-        falling_percentage = ((result.last - result.high) / result.high) * 100
         raising_percentage = ((result.last - result.low) / result.low) * 100
+        falling_percentage = ((result.last - result.high) / result.high) * 100
 
-        console.print(f"{result.created_at} | Low: {result.low} - Current: {result.last} - High: {result.high} | From low to last: {raising_percentage:.2f}% | From high to last: {falling_percentage:.2f}%")
+        # console.print(f"{result.created_at} | Low: {result.low} - Current: {result.last} - High: {result.high} | From low to last: {raising_percentage:.2f}% | From high to last: {falling_percentage:.2f}%")
 
+        console.print(f"SMA 24h: {to_currency(sma)}")
+        console.print(f"EMA 10h: {to_currency(ema)}")
+        console.print(f"LAST: {to_currency(result.last)}")
+
+        '''
         Telegram().send_message(
             f"*Updated at:* {result.created_at} \n"
-            f"*Lower price:* {to_currency(result.low)} \n"
-            f"*Current price:* {to_currency(result.last)} \n"
-            f"*Higher price:* {to_currency(result.high)} \n"
+            f"*Lower:* {to_currency(result.low)} \n"
+            f"*Current:* {to_currency(result.last)} \n"
+            f"*Average 24hs:* {to_currency(sma)} \n"
+            f"*Higher:* {to_currency(result.high)} \n"
             f"*From low to current:* {to_percentage(raising_percentage)} \n"
-            f"*From high to current:* {to_percentage(falling_percentage)} \n"
-            f"*Average price:* {to_currency(average)}")
+            f"*From high to current:* {to_percentage(falling_percentage)} \n")
+        '''
 
     except Exception as e:
         console.print(f"ERROR: {e}")

@@ -89,7 +89,7 @@ class BitsoService:
     def get_orders(self):
         return self.bitso.get_orders()
 
-    def place_order(self, trade_data : dict) -> dict:
+    def place_order(self, order_data: dict) -> dict:
         return {}
 
     def get_account_status(self) -> dict:

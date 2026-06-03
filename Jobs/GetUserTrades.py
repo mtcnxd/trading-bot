@@ -1,7 +1,6 @@
 from database import SessionLocal
 from Services.BitsoService import BitsoService
 from Services.Telegram import Telegram
-from datetime import datetime, timedelta
 from rich.console import Console
 from rich.table import Table
 
