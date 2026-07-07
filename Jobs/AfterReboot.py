@@ -15,6 +15,7 @@ def get_local_ip():
     return ip
 
 now = datetime.datetime.now()
+time_formatted=now.strftime("%Y-%m-%d %H:%M:%S")
 ip = get_local_ip()
 
-Telegram().send_message(f"The system has been started at: {now}\nWith local IP: {ip}")
+Telegram().send_message(f"System has been started at: {time_formatted}\nWith local IP: {ip}")
